@@ -55,8 +55,8 @@ namespace CoffeeShop.Repositories
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "SELECT Coffee.Id, Title, BeanVariety.Name as BeanVariety FROM Coffee WHERE Id = @id JOIN BeanVariety on Coffee.BeanVarietyId = BeanVariety.Id GROUP BY Coffee.Id, Coffee.Title, BeanVariety.Name";
-                    cmd.Parameters.AddWithValue("id", id);
+                    cmd.CommandText = "SELECT Coffee.Id, Title, BeanVariety.Name as BeanVariety FROM Coffee JOIN BeanVariety on Coffee.BeanVarietyId = BeanVariety.Id AND Coffee.Id = @id GROUP BY Coffee.Id, Coffee.Title, BeanVariety.Name";
+                    cmd.Parameters.AddWithValue("@id", id);
 
                     var reader = cmd.ExecuteReader();
 
@@ -69,7 +69,7 @@ namespace CoffeeShop.Repositories
                             Title = reader.GetString(reader.GetOrdinal("Title")),
                             beanVariety = new BeanVariety()
                             {
-                                Name = reader.GetString(reader.GetOrdinal("Name")),
+                                Name = reader.GetString(reader.GetOrdinal("BeanVariety")),
                             }
                         };
                     }
